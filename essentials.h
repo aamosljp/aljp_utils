@@ -3,10 +3,20 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <setjmp.h>
+
+// Error Handling
+// Remember to call SET_ERROR_JMP before erroring
+struct __jmp_buf_tag __aljp_error_jmpbuf[1024];
+
+#define SET_ERROR_JMP setjmp(__aljp_error_jmpbuf)
+#define ERROR(x) longjmp(__aljp_error_jmpbuf, x)
+
+// Dynamic Array
 
 #define DA_INIT_CAP 256
 
-// Dynamic Array
 typedef struct {
     uint32_t size;
     uint32_t capacity;
@@ -40,9 +50,21 @@ typedef struct {
 
 #define ASSERT(cond) do { \
         if (!(cond)) { \
-            fprintf(stderr, "Assertion failed: %s\n", #cond); \
-            abort(); \
+            fprintf(stderr, "Assertion '%s' failed at: %s:%d\n", #cond, __FILE__, __LINE__); \
+            if (__aljp_error_jmpbuf != NULL) { \
+                ERROR(1); \
+            } else { \
+                fprintf(stderr, "SET_ERROR_JMP has not been called! Continuing execution as normal...\n"); \
+            } \
         } \
     } while (0)
+
+#ifdef DEBUG
+#define DEBUG_LOG(fmt,...) \
+        fprintf(stderr, fmt, __VA_ARGS__)
+#endif
+#ifndef DEBUG
+#define DEBUG_LOG(fmt,...)
+#endif
 
 #endif
