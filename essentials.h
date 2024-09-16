@@ -38,4 +38,11 @@ typedef struct {
         free(da); \
     } while (0)
 
+#define ASSERT(cond) do { \
+        if (!(cond)) { \
+            fprintf(stderr, "Assertion failed: %s\n", #cond); \
+            abort(); \
+        } \
+    } while (0)
+
 #endif
