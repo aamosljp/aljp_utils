@@ -155,9 +155,4 @@
 #define ALJP_INIT(x)
 #endif
 
-#define TEST(a, ..., b) do { \
-        eprint(a, ##__VA_ARGS__); \
-        eprint("%d\n", b); \
-    } while (0)
-
 #endif
