@@ -89,6 +89,12 @@
 
 #define eprintf(fmt,...) fprintf(stderr, fmt, ##__VA_ARGS__)
 
+#define PDEBUG(fmt,...) DEBUG_LOG(STYLE_BOLD COLOR_FG_CYAN "[DEBUG] " COLOR_FG_RESET fmt, ##__VA_ARGS__)
+#define PINFO(fmt,...) eprintf(STYLE_BOLD COLOR_FG_GREEN "[INFO] " COLOR_FG_RESET fmt, ##__VA_ARGS__)
+#define PWARN(fmt,...) eprintf(STYLE_BOLD COLOR_FG_YELLOW "[WARN] " COLOR_FG_RESET fmt, ##__VA_ARGS__)
+#define PERROR(fmt,...) eprintf(STYLE_BOLD COLOR_FG_RED "[ERROR] " COLOR_FG_RESET fmt, ##__VA_ARGS__)
+#define PFATAL(fmt,...) eprintf(STYLE_BOLD COLOR_BG_RED "[FATAL] " COLOR_FG_RESET fmt, ##__VA_ARGS__)
+
 #define MIN(x, y) x < y ? x : y
 
 #define MAX(x, y) x > y ? x : y
@@ -148,5 +154,10 @@
 #else
 #define ALJP_INIT(x)
 #endif
+
+#define TEST(a, ..., b) do { \
+        eprint(a, ##__VA_ARGS__); \
+        eprint("%d\n", b); \
+    } while (0)
 
 #endif
